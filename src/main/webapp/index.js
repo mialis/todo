@@ -45,7 +45,7 @@ function createTodoElement(todo, index) {
   li.appendChild(createTodoCheckBoxInput(todo));
   li.appendChild(document.createTextNode(todo.text));
   if (todo.done) {
-    li.appendChild(createTodoDeleteButton(index));
+    li.appendChild(createTodoDeleteButton(index, todo));
   }
   return li;
 }
@@ -66,13 +66,14 @@ function checkTodo(todo) {
   render();
 }
 
-function createTodoDeleteButton(index) {
+function createTodoDeleteButton(index, todo) {
   const button = document.createElement("input");
   button.type = "button";
   button.value = "DELETE";
   button.style.backgroundColor = "red";
   button.addEventListener("click", () => {
     deleteTodo(index);
+    deleteTodoDB(todo);
   });
   return button;
 }
@@ -124,6 +125,17 @@ function checkTodoDB(todo) {
       "Content-Type": "application/json"
     },
     method: "PUT",
+    body: JSON.stringify(todo)
+  }).then(response => response);
+}
+
+function deleteTodoDB(todo) {
+  fetch("http://localhost:8080/todo/" + todo.id, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "DELETE",
     body: JSON.stringify(todo)
   }).then(response => response);
 }
