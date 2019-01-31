@@ -34,13 +34,10 @@ public class ToDoController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<Object> create(@RequestBody ToDo toDo) {
+	public ResponseEntity<ToDo> create(@RequestBody ToDo toDo) {
 		toDo.setDone(false);
 		ToDo savedToDo = toDoRepository.save(toDo);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedToDo.getId())
-				.toUri();
-
-		return ResponseEntity.created(location).build();
+		return new ResponseEntity(savedToDo, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/{id}")

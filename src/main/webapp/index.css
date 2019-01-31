@@ -1,0 +1,62 @@
+@charset "ISO-8859-1";
+
+body {
+  background: rgb(0, 212, 255);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 212, 255, 1) 11%,
+    rgba(9, 34, 121, 1) 72%,
+    rgba(11, 11, 57, 1) 100%
+  );
+}
+.addButton {
+  border-radius: 12px;
+  border-color: #4caf50;
+  margin-left: 20px;
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  padding: 16px 32px;
+  font-style: italic;
+  font-family: "verdana";
+}
+.addButton:hover {
+  background-color: #4caf50;
+  color: white;
+  transform: scale(1.5) perspective(1px);
+}
+.inputText {
+  height: 38px;
+  width: 70%;
+  margin: 10px;
+  border-radius: 12px;
+  font-size: 20px;
+  font-style: italic;
+  font-family: "verdana";
+}
+.deleteButton {
+  border-radius: 12px;
+  border-color: red;
+  background-color: white;
+  color: black;
+  margin-left: 10px;
+  font-style: italic;
+  font-family: "verdana";
+}
+.deleteButton:hover {
+  background-color: red;
+  color: white;
+}
+.li {
+  font-size: 20px;
+  font-style: italic;
+  font-family: "verdana";
+  padding: 10px;
+  margin: 10px;
+}
+.checkbox {
+  height: 20px;
+  width: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}

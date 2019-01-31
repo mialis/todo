@@ -12,6 +12,7 @@ function createTodoAppDiv(todos) {
 function createTodoTextInput() {
   const inputText = document.createElement("input");
   inputText.type = "text";
+  inputText.className = "inputText";
   return inputText;
 }
 
@@ -19,17 +20,16 @@ function createTodoAddButton(todoInputElement) {
   const button = document.createElement("input");
   button.type = "button";
   button.value = "ADD";
+  button.className = "addButton";
   button.addEventListener("click", () => {
-    addTodoDB(createTodo(todoInputElement.value));
+    addTodoDB(todoInputElement.value).then(createTodo);
   });
   return button;
 }
 
-function createTodo(text) {
-  const newTodo = { done: false, text };
-  todos.push(newTodo);
+function createTodo(todo) {
+  todos.push(todo);
   render();
-  return newTodo;
 }
 
 function createTodoList(todos) {
@@ -42,6 +42,7 @@ function createTodoList(todos) {
 
 function createTodoElement(todo, index) {
   const li = document.createElement("li");
+  li.className = "li";
   li.appendChild(createTodoCheckBoxInput(todo));
   li.appendChild(document.createTextNode(todo.text));
   if (todo.done) {
@@ -53,6 +54,7 @@ function createTodoElement(todo, index) {
 function createTodoCheckBoxInput(todo) {
   const checkBoxInput = document.createElement("input");
   checkBoxInput.type = "checkbox";
+  checkBoxInput.className = "checkbox";
   checkBoxInput.checked = todo.done;
   checkBoxInput.addEventListener("click", () => {
     checkTodo(todo);
@@ -70,7 +72,7 @@ function createTodoDeleteButton(index, todo) {
   const button = document.createElement("input");
   button.type = "button";
   button.value = "DELETE";
-  button.style.backgroundColor = "red";
+  button.className = "deleteButton";
   button.addEventListener("click", () => {
     deleteTodo(index);
     deleteTodoDB(todo);
@@ -107,15 +109,15 @@ function main() {
 
 main();
 
-function addTodoDB(todo) {
-  fetch("http://localhost:8080/todo", {
+function addTodoDB(text) {
+  return fetch("http://localhost:8080/todo", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
     },
     method: "POST",
-    body: JSON.stringify(todo)
-  }).then(response => response);
+    body: JSON.stringify({ text })
+  }).then(response => response.json());
 }
 
 function checkTodoDB(todo) {
@@ -126,7 +128,7 @@ function checkTodoDB(todo) {
     },
     method: "PUT",
     body: JSON.stringify(todo)
-  }).then(response => response);
+  });
 }
 
 function deleteTodoDB(todo) {
@@ -137,7 +139,7 @@ function deleteTodoDB(todo) {
     },
     method: "DELETE",
     body: JSON.stringify(todo)
-  }).then(response => response);
+  });
 }
 
 // Promise.resolve(4).then(data =>)
