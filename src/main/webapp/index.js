@@ -20,7 +20,7 @@ function createTodoAddButton(todoInputElement) {
   button.type = "button";
   button.value = "ADD";
   button.addEventListener("click", () => {
-    createTodo(todoInputElement.value);
+    addTodoDB(createTodo(todoInputElement.value));
   });
   return button;
 }
@@ -29,6 +29,7 @@ function createTodo(text) {
   const newTodo = { done: false, text };
   todos.push(newTodo);
   render();
+  return newTodo;
 }
 
 function createTodoList(todos) {
@@ -55,6 +56,7 @@ function createTodoCheckBoxInput(todo) {
   checkBoxInput.checked = todo.done;
   checkBoxInput.addEventListener("click", () => {
     checkTodo(todo);
+    checkTodoDB(todo);
   });
   return checkBoxInput;
 }
@@ -81,29 +83,50 @@ function deleteTodo(index) {
 }
 
 function render() {
-	document.body.innerHTML = "";
-	document.body.appendChild(createTodoAppDiv(todos));
+  document.body.innerHTML = "";
+  document.body.appendChild(createTodoAppDiv(todos));
 }
 
-//JSON HANDLING
+// JSON HANDLING
 function addToDos(data) {
-	todos = data;
-	render();
+  todos = data;
+  render();
 }
 
 function getTodos() {
-  return fetch("http://localhost:8080/todo")
-    .then(response => response.json())
+  return fetch("http://localhost:8080/todo").then(response => response.json());
 }
 
-function main(){
-	// getTodos().then(data => {
-	// addToDos(data)
-	// })
-    getTodos().then(addToDos)
+function main() {
+  // getTodos().then(data => {
+  // addToDos(data)
+  // })
+  getTodos().then(addToDos);
 }
 
 main();
+
+function addTodoDB(todo) {
+  fetch("http://localhost:8080/todo", {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "POST",
+    body: JSON.stringify(todo)
+  }).then(response => response);
+}
+
+function checkTodoDB(todo) {
+  fetch("http://localhost:8080/todo/" + todo.id + "/done", {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    method: "PUT",
+    body: JSON.stringify(todo)
+  }).then(response => response);
+}
 
 // Promise.resolve(4).then(data =>)
 
