@@ -5,6 +5,7 @@ let userId;
 
 function createSelect(usersTodo) {
   const selectUser = document.createElement("select");
+  selectUser.className = "select";
   usersTodo.forEach(user => {
     selectUser.appendChild(createUserTodoOption(user));
   });
@@ -45,6 +46,14 @@ function createTodoTextInput() {
   const inputText = document.createElement("input");
   inputText.type = "text";
   inputText.className = "inputText";
+  inputText.addEventListener("keypress", function handleKeyPress(e) {
+    var key = e.keyCode || e.which;
+    if (inputText.value != "" && userId != null) {
+      if (key == 13) {
+        addTodoDB(inputText.value).then(createTodo);
+      }
+    }
+  });
   return inputText;
 }
 
@@ -54,7 +63,9 @@ function createTodoAddButton(todoInputElement) {
   button.value = "ADD";
   button.className = "addButton";
   button.addEventListener("click", () => {
-    addTodoDB(todoInputElement.value).then(createTodo);
+    if (todoInputElement.value != "") {
+      addTodoDB(todoInputElement.value).then(createTodo);
+    }
   });
   return button;
 }

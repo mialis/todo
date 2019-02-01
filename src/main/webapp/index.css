@@ -60,3 +60,14 @@ body {
   margin-left: 10px;
   margin-right: 10px;
 }
+
+.select {
+  display: block;
+  margin: 10px;
+  height: 38px;
+  width: 70%;
+  border-radius: 12px;
+  font-size: 20px;
+  font-style: italic;
+  font-family: "verdana";
+}
