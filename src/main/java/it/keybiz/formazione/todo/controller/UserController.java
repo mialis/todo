@@ -11,26 +11,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.keybiz.formazione.todo.model.UserTodo;
-import it.keybiz.formazione.todo.repository.UserTodoRepository;
+import it.keybiz.formazione.todo.model.User;
+import it.keybiz.formazione.todo.repository.UserRepository;
 
 @RestController
 @RequestMapping("/user")
-public class UserTodoController {
+public class UserController {
 
 	@Autowired
-	UserTodoRepository userTodoRepository;
+	UserRepository userTodoRepository;
 	
 	@GetMapping("")
-	public List<UserTodo> getAll() {
+	public List<User> getAll() {
 		return userTodoRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<UserTodo> get(@PathVariable long id) {
-		Optional<UserTodo> userTodo = userTodoRepository.findById(id);
+	public ResponseEntity<User> get(@PathVariable long id) {
+		Optional<User> userTodo = userTodoRepository.findById(id);
 		if (userTodo.isPresent()) {
-			return new ResponseEntity<UserTodo>(userTodo.get(), HttpStatus.OK);
+			return new ResponseEntity<User>(userTodo.get(), HttpStatus.OK);
 		} else {
 			return ResponseEntity.notFound().build();
 		}

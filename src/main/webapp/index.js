@@ -1,12 +1,12 @@
 //USER TODO
 
-let usersTodo = [];
+let users = [];
 let userId;
 
-function createSelect(usersTodo) {
+function createSelect(users) {
   const selectUser = document.createElement("select");
   selectUser.className = "select";
-  usersTodo.forEach(user => {
+  users.forEach(user => {
     selectUser.appendChild(createUserTodoOption(user));
   });
   selectUser.value = userId;
@@ -35,10 +35,12 @@ let todos = [];
 function createTodoAppDiv(todos) {
   const div = document.createElement("div");
   const todoInputElement = createTodoTextInput();
-  div.appendChild(createSelect(usersTodo));
-  div.appendChild(todoInputElement);
-  div.appendChild(createTodoAddButton(todoInputElement));
-  div.appendChild(createTodoList(todos));
+  div.appendChild(createSelect(users));
+  if (userId) {
+    div.appendChild(todoInputElement);
+    div.appendChild(createTodoAddButton(todoInputElement));
+    div.appendChild(createTodoList(todos));
+  }
   return div;
 }
 
@@ -145,12 +147,12 @@ function getTodos(userId) {
   );
 }
 
-function addUsersTodo(data) {
-  usersTodo = data;
+function addUsers(data) {
+  users = data;
   render();
 }
 
-function getUsersTodo() {
+function getUsers() {
   return fetch("http://localhost:8080/user").then(response => response.json());
 }
 
@@ -158,7 +160,7 @@ function main() {
   // getTodos().then(data => {
   // addToDos(data)
   // })
-  getUsersTodo().then(addUsersTodo);
+  getUsers().then(addUsers);
 }
 
 main();
