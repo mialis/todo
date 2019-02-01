@@ -4,6 +4,8 @@ package it.keybiz.formazione.todo.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 
 @Entity
@@ -11,10 +13,11 @@ public class ToDo {
 	
 	@Id
 	@GeneratedValue 
-	public long id;
-	public String text;
-	public boolean done;
-	
+	private long id;
+	private String text;
+	private boolean done;
+	@ManyToOne
+	private UserTodo user;
 	
 	public long getId() {
 		return id;

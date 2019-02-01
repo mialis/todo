@@ -1,8 +1,40 @@
+//USER TODO
+
+let usersTodo = [];
+let userId;
+
+function createSelect(usersTodo) {
+  const selectUser = document.createElement("select");
+  usersTodo.forEach(user => {
+    selectUser.appendChild(createUserTodoOption(user));
+  });
+  selectUser.value = userId;
+  selectUser.addEventListener("change", () => {
+    userId = selectUser.value;
+    loadTodos();
+  });
+  return selectUser;
+}
+
+function createUserTodoOption(user) {
+  const option = document.createElement("option");
+  option.value = user.id;
+  option.appendChild(
+    document.createTextNode(user.firstname + " " + user.lastname)
+  );
+  return option;
+}
+
+function loadTodos() {
+  getTodos(userId).then(addToDos);
+}
+
 let todos = [];
 
 function createTodoAppDiv(todos) {
   const div = document.createElement("div");
   const todoInputElement = createTodoTextInput();
+  div.appendChild(createSelect(usersTodo));
   div.appendChild(todoInputElement);
   div.appendChild(createTodoAddButton(todoInputElement));
   div.appendChild(createTodoList(todos));
@@ -96,21 +128,32 @@ function addToDos(data) {
   render();
 }
 
-function getTodos() {
-  return fetch("http://localhost:8080/todo").then(response => response.json());
+function getTodos(userId) {
+  return fetch("http://localhost:8080/todo/" + userId).then(response =>
+    response.json()
+  );
+}
+
+function addUsersTodo(data) {
+  usersTodo = data;
+  render();
+}
+
+function getUsersTodo() {
+  return fetch("http://localhost:8080/user").then(response => response.json());
 }
 
 function main() {
   // getTodos().then(data => {
   // addToDos(data)
   // })
-  getTodos().then(addToDos);
+  getUsersTodo().then(addUsersTodo);
 }
 
 main();
 
 function addTodoDB(text) {
-  return fetch("http://localhost:8080/todo", {
+  return fetch("http://localhost:8080/todo/" + userId, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
@@ -121,7 +164,7 @@ function addTodoDB(text) {
 }
 
 function checkTodoDB(todo) {
-  fetch("http://localhost:8080/todo/" + todo.id + "/done", {
+  fetch("http://localhost:8080/todo/" + userId + "/" + todo.id + "/done", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"
@@ -132,7 +175,7 @@ function checkTodoDB(todo) {
 }
 
 function deleteTodoDB(todo) {
-  fetch("http://localhost:8080/todo/" + todo.id, {
+  fetch("http://localhost:8080/todo/" + userId + "/" + todo.id, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"

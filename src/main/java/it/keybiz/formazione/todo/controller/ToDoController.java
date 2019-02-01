@@ -27,20 +27,21 @@ public class ToDoController {
 
 	@Autowired
 	ToDoRepository toDoRepository;
-
-	@GetMapping("")
-	public List<ToDo> getAll() {
-		return toDoRepository.findAll();
+	
+	@GetMapping("/{userId}")
+	public List<ToDo> getAllByUserId(@PathVariable long userId) {
+		return toDoRepository.findAllByUserId(userId);
 	}
 
-	@PostMapping("")
+
+	@PostMapping("/{userId}")
 	public ResponseEntity<ToDo> create(@RequestBody ToDo toDo) {
 		toDo.setDone(false);
 		ToDo savedToDo = toDoRepository.save(toDo);
 		return new ResponseEntity(savedToDo, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{userId}/{id}")
 	public ResponseEntity<ToDo> get(@PathVariable long id) {
 		Optional<ToDo> toDo = toDoRepository.findById(id);
 		if (toDo.isPresent()) {
@@ -50,7 +51,7 @@ public class ToDoController {
 		}
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{userId}/{id}")
 	public ResponseEntity<ToDo> delete(@PathVariable long id) {
 		Optional<ToDo> toDo = toDoRepository.findById(id);
 		if (toDo.isPresent()) {
@@ -66,7 +67,7 @@ public class ToDoController {
 		}
 	}
 
-	@PutMapping("/{id}/done")
+	@PutMapping("/{userId}/{id}/done")
 	public ResponseEntity<ToDo> update(@PathVariable("id") long id, @RequestBody ToDoCheckDTO action) {
 		Optional<ToDo> toDo = toDoRepository.findById(id);
 		if (toDo.isPresent()) {
